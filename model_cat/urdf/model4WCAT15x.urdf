@@ -1,0 +1,244 @@
+<?xml version="1.0"?>
+    
+    <!-- ##################################################################################### -->
+    <!-- ############################# Model 4W del CAT15x ############################ -->
+    <!-- ##################################################################################### -->
+
+    <robot name="CAT15x_4W">
+        
+         <!-- Declarem l'origen de coordenades més bàsiques del "món" on creem el model -->
+        <link name="base_link"></link> <!-- Sobre el link(origen de coordenades) "base_link" es construeixen tots els altres origens de coordenades -->
+
+        <!-- ############################# CENTRE DE GRAVETAT ############################ -->
+        <!-- Creem una articulació que simbolitza la distància entre el centre de gravetat del model i el base_link del món. Això es fa perquè rviz utilitza obligatòriament base_link i d'aquesta manera podrà realitzar totes les transformades fins aquest origen de coordenades-->
+        <joint name="dist_baselink_cgCAT15x" type="fixed"> <!-- fixed: vol dir que l'articulació conecta dos eixos de referència de forma fixa, no té graus de llibertat-->
+            <parent link="base_link"/> <!--Li dones un dels links amb el que el conectaràs (del que neix)-->
+            <child link="cgCAT15x"/> <!--Li dones l'altre link amb el que el conectarà (on va)-->
+            <origin xyz="0 0 0"
+                    rpy="0 0 0"/> <!-- origin t'especifica la posició i rotació del child link-->
+        </joint>
+
+        <link name="cgCAT15x" type="fixed"> <!-- fixed: vol dir que és fix respecte el seu pare-->
+            <inertial> <!-- Defineixes les propietats físiques --> 
+                <!-- ROS t'avisa que si estàs utiltzant links de referència, com en aquest cas, per controlar-los, si els hi dones un valor de 0 pot passar que el model col·lapsi i tots els links conicideixin amb el base-link. 
+                Per evitar-ho et dona unes xifres aproximades bàsiques. Et diu que utilitzis un tensor d'inèrcies de ixx/iyy/izz=1e-3. Que correspondria a la inèrcia d'una caixa de 10cm i 600 grams. -->
+                <mass value="1"/> <!-- La massa es defineix en kg en urdf -->
+                <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+            </inertial>
+        </link>
+
+        <!-- ############################# XASSÍS ############################ -->
+        <joint name="cgCAT15x_xassisCAT15x" type="fixed"></link> 
+            <parent link="cgCAT15x"/> <!--Li dones un dels links amb el que el conectaràs (del que neix)-->
+            <child link="xassisCAT15x"/> <!--Li dones l'altre link amb el que el conectarà (on va)-->
+            <origin xyz="0.8109 0 -0.048"
+                    rpy="0 0 0"/> <!-- origin t'especifica la posició i rotació del child link-->
+        </joint>
+
+        <link name="xassisCAT15x">
+            <!-- Descrius les propietats de col·lisió del teu link. És obligatori (pel software intern de càlcul que té ROS, que li defineixis una geometria.)-->
+            <collision>
+                <geometry>
+                    <mesh filename="package://CATSIM/src/model_cat/meshes/whole_car.stl" scale = "0.001 0.001 0.001" /> <!-- Escales el model per poder-lo visualitzar bé. Tens la geometria emmagatzemada en un fitxer estil stl. Així el pots exportar de solidworks i posar-li la forma que vulguis-->
+                </geometry>
+            </collision>
+            <!-- Descrius les propietats visuals del teu link perquè es pugui mostrar -->
+            <visual>
+                <geometry>
+                    <mesh filename="package://CATSIM/src/model_cat/meshes/whole_car.stl" scale = "0.001 0.001 0.001" />
+                </geometry>
+                <material> 
+                    <color rgba = "4.0 52.0 100.0 1.0"> <!-- Color blau equip -->
+                </material> 
+            </visual>
+            <!-- Defineixes les propietats físiques --> 
+            <inertial> 
+                <mass value="200"/> <!-- La massa es defineix en kg en urdf -->
+                <inertia ixx="16.3" ixy="0.0" ixz="0.0" iyy="33.6" iyz="0.0" izz="47.9"/>
+                <origin="-0.69 0 0.1" > <!-- Centre de gravetat del Xassís-->
+            </inertial>
+        </link>
+    
+        <!-- ############################# RODA POSTERIOR ESQUERRA ############################ -->
+        <joint name="xassisCAT15x_rodapostECAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua-->
+            <origin xyz="-1.53 0.6 -0.232"
+                    rpy="0 0 0"/>
+            <parent link="xassisCAT15x"/>
+            <child link="rodapostECAT15x"/>
+            <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
+        </joint>
+
+        <link name="rodapostECAT15x">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="5"/>
+                <inertia ixx="0.3" ixy="0" ixz="0" iyy="0.2" iyz="0" izz="0.2"/>
+            </inertial>
+            <visual>
+                <geometry>
+                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                </geometry>
+                <material> 
+                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
+                </material>             
+            </visual>
+            <collision>
+                <geometry>
+                    <sphere radius="0.225"/> <!-- Computacionalment seria complicat que els xocs amb la roda es fessin amb el format stl, és millor que se li doni una forma senzilla -->
+                </geometry>
+            </collision>
+        </link>
+        <!-- Li donem un nom per poder utilitzar-la a gazebo -->
+        <gazebo reference="rodapostECAT15x"> </gazebo>
+
+        <!-- ############################# RODA POSTERIOR DRETA ############################ -->
+        <joint name="xassisCAT15x_rodapostDCAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua-->
+            <origin xyz="-1.53 -0.6 0.232"
+                    rpy="0 0 0"/>
+            <parent link="xassisCAT15x"/>
+            <child link="rodapostDCAT15x"/>
+            <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y sense límits-->
+        </joint>
+
+        <link name="rodapostDCAT15x">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="5"/>
+                <inertia ixx="0.3" ixy="0" ixz="0" iyy="0.2" iyz="0" izz="0.2"/>
+            </inertial>
+            <visual>
+                <geometry>
+                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                </geometry>
+                <material> 
+                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
+                </material>             
+            </visual>
+            <collision>
+                <geometry>
+                    <sphere radius="0.225"/> <!-- Computacionalment seria complicat que els xocs amb la roda es fessin amb el format stl, és millor que se li doni una forma senzilla -->
+                </geometry>
+            </collision>
+        </link>
+        <!-- Li donem un nom per poder utilitzar-la a gazebo -->
+        <gazebo reference="rodapostDCAT15x"> </gazebo>
+
+        <!-- ############################# DIRECCIÓ ESQUERRA ############################ -->
+        <joint name="xassisCAT15x_direccioECAT15x" type="revolute"> <!--Aquest tipus indica que l'articulació rotarà de forma continua amb límits-->
+            <origin xyz="0 0.6 0.232"
+                    rpy="0 0 0"/>
+            <parent link="xassisCAT15x"/>
+            <child link="direccioECAT15x"/>
+            <axis xyz="0 0 1"/> <!--T'indica que rotarà de forma continua sobre l'eix z-->
+            <limit lower="-0.8727" upper="0.8727" effort="10000000" velocity="1000000"/> <!--T'indica el límit inferior i superior fins el qual pot girar el volant en radiants,la màxima força que l'articulació pot exercir en newtons, i la velocitat angular específica màxima que pot moure's l'articulació en rad/s. -->
+
+        </joint>
+
+        <link name="direccioECAT15x">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="1"/>
+                <inertia ixx="0.004" ixy="0" ixz="0" iyy="0.004" iyz="0" izz="0.004"   />
+            </inertial>
+            <visual>
+                <geometry>
+                <mesh filename="package://CATSIM/src/model_cat/meshes/steering_hinge.stl" scale="1 1 1"/>
+                </geometry>
+                <material> 
+                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
+                </material>             
+            </visual>
+        </link>
+
+        <!-- ############################# DIRECCIÓ DRETA ############################ -->
+        <joint name="xassisCAT15x_direccioDCAT15x" type="revolute"> <!--Aquest tipus indica que l'articulació rotarà de forma continua amb límits-->
+            <origin xyz="0 -0.6 0.232"
+                    rpy="0 0 0"/>
+            <parent link="xassisCAT15x"/>
+            <child link="direccioDCAT15x"/>
+            <axis xyz="0 0 1"/> <!--T'indica que rotarà de forma continua sobre l'eix z-->
+            <limit lower="-0.8727" upper="0.8727" effort="10000000" velocity="1000000"/>
+
+        </joint>
+
+        <link name="direccioDCAT15x">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="1"/>
+                <inertia ixx="0.004" ixy="0" ixz="0" iyy="0.004" iyz="0" izz="0.004"   />
+            </inertial>
+            <visual>
+                <geometry>
+                <mesh filename="package://CATSIM/src/model_cat/meshes/steering_hinge.stl" scale="1 1 1"/>
+                </geometry>
+                <material> 
+                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
+                </material>             
+            </visual>
+        </link>
+
+        <!-- ############################# RODA DAVANTERA ESQUERRA ############################ -->
+        <joint name="direccióECAT15x_rodadavECAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua sense límits-->
+            <origin xyz="0 0 0"
+                    rpy="0 0 0"/>
+            <parent link="direccioECAT15x"/>
+            <child link="rodadavECAT15x"/>
+            <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
+        </joint>
+
+        <link name="rodadavECAT15x">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="5"/>
+                <inertia ixx="0.3" ixy="0" ixz="0" iyy="0.2" iyz="0" izz="0.2"/>
+            </inertial>
+            <visual>
+                <geometry>
+                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                </geometry>
+                <material> 
+                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
+                </material>             
+            </visual>
+            <collision>
+                <geometry>
+                    <sphere radius="0.225"/> <!-- Computacionalment seria complicat que els xocs amb la roda es fessin amb el format stl, és millor que se li doni una forma senzilla -->
+                </geometry>
+            </collision>
+        </link>
+        <!-- Li donem un nom per poder utilitzar-la a gazebo -->
+        <gazebo reference="rodadavECAT15x"> </gazebo>
+
+        <!-- ############################# RODA DAVANTERA DRETA ############################ -->
+        <joint name="direccióDCAT15x_rodadavDCAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua sense límits-->
+            <origin xyz="0 0 0"
+                    rpy="0 0 0"/>
+            <parent link="direccioDCAT15x"/>
+            <child link="rodadavDCAT15x"/>
+            <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
+        </joint>
+
+        <link name="rodadavDCAT15x">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="5"/>
+                <inertia ixx="0.3" ixy="0" ixz="0" iyy="0.2" iyz="0" izz="0.2"/>
+            </inertial>
+            <visual>
+                <geometry>
+                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                </geometry>
+                <material> 
+                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
+                </material>             
+            </visual>
+            <collision>
+                <geometry>
+                    <sphere radius="0.225"/> <!-- Computacionalment seria complicat que els xocs amb la roda es fessin amb el format stl, és millor que se li doni una forma senzilla -->
+                </geometry>
+            </collision>
+        </link>
+        <!-- Li donem un nom per poder utilitzar-la a gazebo -->
+        <gazebo reference="rodadavDCAT15x"> </gazebo>
+  
+    </robot>
