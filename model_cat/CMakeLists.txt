@@ -23,6 +23,8 @@ endif()
 
 # Troba els paquets d'ament i establir-los com a dependències
 find_package(rclcpp REQUIRED)
+find_package(ament_cmake REQUIRED)
+find_package(std_msgs REQUIRED)
 find_package(urdf REQUIRED)
 find_package(action_msgs REQUIRED)
 find_package(tf2 REQUIRED)

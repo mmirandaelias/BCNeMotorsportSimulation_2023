@@ -1,4 +1,3 @@
-    <?xml version="1.0"?>
     
     <!-- ##################################################################################### -->
     <!-- ############################# Model Bicicleta del CAT15x ############################ -->
@@ -11,12 +10,6 @@
 
         <!-- ############################# CENTRE DE GRAVETAT ############################ -->
         <!-- Creem una articulació que simbolitza la distància entre el centre de gravetat del model i el base_link del món. Això es fa perquè rviz utilitza obligatòriament base_link i d'aquesta manera podrà realitzar totes les transformades fins aquest origen de coordenades-->
-        <joint name="dist_baselink_cgCAT15x" type="fixed"> <!-- fixed: vol dir que l'articulació conecta dos eixos de referència de forma fixa, no té graus de llibertat-->
-            <parent link="base_link"/> <!--Li dones un dels links amb el que el conectaràs (del que neix)-->
-            <child link="cgCAT15x"/> <!--Li dones l'altre link amb el que el conectarà (on va)-->
-            <origin xyz="0 0 0"
-                    rpy="0 0 0"/> <!-- origin t'especifica la posició i rotació del child link-->
-        </joint>
 
         <link name="cgCAT15x" type="fixed"> <!-- fixed: vol dir que és fix respecte el seu pare-->
             <inertial> <!-- Defineixes les propietats físiques --> 
@@ -27,46 +20,48 @@
             </inertial>
         </link>
 
-        <!-- ############################# XASSÍS ############################ -->
-        <joint name="cgCAT15x_xassisCAT15x" type="fixed"></link> 
-            <parent link="cgCAT15x"/> <!--Li dones un dels links amb el que el conectaràs (del que neix)-->
-            <child link="xassisCAT15x"/> <!--Li dones l'altre link amb el que el conectarà (on va)-->
-            <origin xyz="0.8109 0 -0.048"
+        <joint name="dist_baselink_cgCAT15x" type="fixed"> <!-- fixed: vol dir que l'articulació conecta dos eixos de referència de forma fixa, no té graus de llibertat-->
+            <parent link="base_link"/> <!--Li dones un dels links amb el que el conectaràs (del que neix)-->
+            <child link="cgCAT15x"/> <!--Li dones l'altre link amb el que el conectarà (on va)-->
+            <origin xyz="0 0 0"
                     rpy="0 0 0"/> <!-- origin t'especifica la posició i rotació del child link-->
         </joint>
+
+        <!-- ############################# XASSÍS ############################ -->
 
         <link name="xassisCAT15x">
             <!-- Descrius les propietats de col·lisió del teu link. És obligatori (pel software intern de càlcul que té ROS, que li defineixis una geometria.)-->
             <collision>
                 <geometry>
-                    <mesh filename="package://CATSIM/src/model_cat/meshes/whole_car.stl" scale = "0.001 0.001 0.001" /> <!-- Escales el model per poder-lo visualitzar bé. Tens la geometria emmagatzemada en un fitxer estil stl. Així el pots exportar de solidworks i posar-li la forma que vulguis-->
+                    <mesh filename="package://model_cat/meshes/whole_car.stl"/> <!-- Escales el model per poder-lo visualitzar bé. Tens la geometria emmagatzemada en un fitxer estil stl. Així el pots exportar de solidworks i posar-li la forma que vulguis-->
                 </geometry>
             </collision>
             <!-- Descrius les propietats visuals del teu link perquè es pugui mostrar -->
             <visual>
+                <origin xyz="-0.765 0 -0.278"/>
                 <geometry>
-                    <mesh filename="package://CATSIM/src/model_cat/meshes/whole_car.stl" scale = "0.001 0.001 0.001" />
+                    <mesh filename="package://model_cat/meshes/whole_car.stl"/>
                 </geometry>
-                <material> 
-                    <color rgba = "4.0 52.0 100.0 1.0"> <!-- Color blau equip -->
+                <material name = "material_xassis"> 
+                    <color rgba = "0 0 0.8 1.0"/> <!-- Color blau equip -->
                 </material> 
             </visual>
             <!-- Defineixes les propietats físiques --> 
             <inertial> 
                 <mass value="200"/> <!-- La massa es defineix en kg en urdf -->
                 <inertia ixx="16.3" ixy="0.0" ixz="0.0" iyy="33.6" iyz="0.0" izz="47.9"/>
-                <origin="-0.69 0 0.1" > <!-- Centre de gravetat del Xassís-->
+                <origin xyz="0 0 0" /> <!-- Centre de gravetat del Xassís-->
             </inertial>
         </link>
+
+        <joint name="cgCAT15x_xassisCAT15x" type="fixed">
+            <parent link="cgCAT15x"/> <!--Li dones un dels links amb el que el conectaràs (del que neix)-->
+            <child link="xassisCAT15x"/> <!--Li dones l'altre link amb el que el conectarà (on va)-->
+            <origin xyz="0.765 0 0.278"
+                    rpy="0 0 0"/> <!-- origin t'especifica la posició i rotació del child link-->
+        </joint>
     
         <!-- ############################# RODA POSTERIOR ############################ -->
-        <joint name="xassisCAT15x_rodapostCAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua-->
-            <origin xyz="-1.53 0 0.232"
-                    rpy="0 0 0"/>
-            <parent link="xassisCAT15x"/>
-            <child link="rodapostCAT15x"/>
-            <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
-        </joint>
 
         <link name="rodapostCAT15x">
             <inertial>
@@ -75,21 +70,21 @@
                 <inertia ixx="0.3" ixy="0" ixz="0" iyy="0.2" iyz="0" izz="0.2"/>
             </inertial>
             <visual name = "rodapostECAT15x">
-                <origin xyz="0 0.6 0.232" rpy="0 0 0"/>
+                <origin xyz="-1.53 0 -0.2032" rpy="0 0 0"/>
                 <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                <mesh filename="package://model_cat/meshes/wheelRL.stl"/>
                 </geometry>
-                <material> 
-                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
+                <material name = "material_rodapostE"> 
+                    <color rgba = "0.0 0.0 0.0 1.0"/> <!-- Color negre -->
                 </material>             
             </visual>
             <visual name = "rodapostDCAT15x">
-                <origin xyz="0 -0.6 0.232" rpy="0 0 0"/>
+                <origin xyz="-1.53 0 -0.2032" rpy="0 0 0"/>
                 <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                <mesh filename="package://model_cat/meshes/wheelRR.stl"/>
                 </geometry>
-                <material> 
-                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
+                <material name = "material_rodapostD"> 
+                    <color rgba = "0.0 0.0 0.0 1.0"/> <!-- Color negre -->
                 </material>             
             </visual>
             <collision>
@@ -98,19 +93,18 @@
                 </geometry>
             </collision>
         </link>
+
+        <joint name="xassisCAT15x_rodapostCAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua-->
+            <origin xyz="0.765 0 -0.0748"
+                    rpy="0 0 0"/>
+            <parent link="xassisCAT15x"/>
+            <child link="rodapostCAT15x"/>
+            <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
+        </joint>
         <!-- Li donem un nom per poder utilitzar-la a gazebo -->
         <gazebo reference="rodapostCAT15x"> </gazebo>
 
         <!-- ############################# DIRECCIÓ ############################ -->
-        <joint name="xassisCAT15x_direccioCAT15x" type="revolute"> <!--Aquest tipus indica que l'articulació rotarà de forma continua amb límits-->
-            <origin xyz="0 0 0.232"
-                    rpy="0 0 0"/>
-            <parent link="xassisCAT15x"/>
-            <child link="direccioCAT15x"/>
-            <axis xyz="0 0 1"/> <!--T'indica que rotarà de forma continua sobre l'eix z-->
-            <limit lower="-0.8727" upper="0.8727" effort="10000000" velocity="1000000"/> <!--T'indica el límit inferior i superior fins el qual pot girar el volant en radiants,la màxima força que l'articulació pot exercir en newtons, i la velocitat angular específica màxima que pot moure's l'articulació en rad/s. -->
-
-        </joint>
 
         <link name="direccioCAT15x">
             <inertial>
@@ -118,34 +112,27 @@
                 <mass value="1"/>
                 <inertia ixx="0.004" ixy="0" ixz="0" iyy="0.004" iyz="0" izz="0.004"   />
             </inertial>
-            <visual name = "direccioECAT15x">
-                <origin xyz="0 0.6 0.232" rpy="0 0 0"/>
+            <visual name = "direccioCAT15x">
+                <origin xyz="0 0 -0.2032" rpy="0 0 0"/>
                 <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/steering_hinge.stl" scale="1 1 1"/>
+                <mesh filename="package://model_cat/meshes/steering_hinge.stl" scale="1 1 1"/>
                 </geometry>
-                <material> 
-                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
-                </material>             
-            </visual>
-            <visual name = "direccioDCAT15x">
-                <origin xyz="0 -0.6 0.232" rpy="0 0 0"/>
-                <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/steering_hinge.stl" scale="1 1 1"/>
-                </geometry>
-                <material> 
-                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
+                <material name = "material_direccioD"> 
+                    <color rgba = "0.0 0.0 0.0 1.0"/> <!-- Color negre -->
                 </material>             
             </visual>
         </link>
 
-        <!-- ############################# RODA DAVANTERA ############################ -->
-        <joint name="direccioCAT15x_rodadavCAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua sense límits-->
-            <origin xyz="0 0 0"
+        <joint name="xassisCAT15x_direccioCAT15x" type="revolute"> <!--Aquest tipus indica que l'articulació rotarà de forma continua amb límits-->
+            <origin xyz="-0.765 0 -0.0748"
                     rpy="0 0 0"/>
-            <parent link="direccioCAT15x"/>
-            <child link="rodadavCAT15x"/>
-            <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
+            <parent link="xassisCAT15x"/>
+            <child link="direccioCAT15x"/>
+            <axis xyz="0 0 1"/> <!--T'indica que rotarà de forma continua sobre l'eix z-->
+            <limit lower="-0.8727" upper="0.8727" effort="10000000" velocity="1000000"/> <!--T'indica el límit inferior i superior fins el qual pot girar el volant en radiants,la màxima força que l'articulació pot exercir en newtons, i la velocitat angular específica màxima que pot moure's l'articulació en rad/s. -->
+
         </joint>
+        <!-- ############################# RODA DAVANTERA ############################ -->
 
         <link name="rodadavCAT15x">
             <inertial>
@@ -154,21 +141,21 @@
                 <inertia ixx="0.3" ixy="0" ixz="0" iyy="0.2" iyz="0" izz="0.2"/>
             </inertial>
             <visual name ="rodadavECAT15x" >
-                <origin xyz="0 0.6 0" rpy="0 0 0"/>
+                <origin xyz="0 0 -0.2032" rpy="0 0 0"/>
                 <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                <mesh filename="package://model_cat/meshes/wheelFL.stl"/>
                 </geometry>
-                <material> 
-                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
+                <material name = "material_rodadavE"> 
+                    <color rgba = "0.0 0.0 0.0 1.0"/> <!-- Color negre -->
                 </material>             
             </visual>
-            <visual name ="rodadavDCAT15x" >
-                <origin xyz="0 -0.6 0" rpy="0 0 0"/>
+            <visual name ="rodadavDCAT15x">
+                <origin xyz="0 0 -0.2032" rpy="0 0 0"/>
                 <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                <mesh filename="package://model_cat/meshes/wheelFR.stl"/>
                 </geometry>
-                <material> 
-                    <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
+                <material name = "material_rodadavD"> 
+                    <color rgba = "0.0 0.0 0.0 1.0"/> <!-- Color negre -->
                 </material>             
             </visual>
             <collision>
@@ -179,5 +166,13 @@
         </link>
         <!-- Li donem un nom per poder utilitzar-la a gazebo -->
         <gazebo reference="rodadavCAT15x"> </gazebo>
+
+         <joint name="direccioCAT15x_rodadavCAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua sense límits-->
+            <origin xyz="0 0 0"
+                    rpy="0 0 0"/>
+            <parent link="direccioCAT15x"/>
+            <child link="rodadavCAT15x"/>
+            <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
+        </joint>
   
     </robot>

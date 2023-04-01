@@ -1,7 +1,8 @@
-import launch
-from launch.substitution import Command, LaunchConfiguration
-import launch_ros
 import os
+import launch
+# from launch.substitution import LaunchConfiguration
+import launch_ros
+from sensor_msgs.msg import JointState
 from ament_index_python.packages import get_package_share_directory
 
 def generate_launch_description():
@@ -34,7 +35,7 @@ def generate_launch_description():
         package='joint_state_publisher', #Paquet que ja ve amb ROS
         executable='joint_state_publisher', #Executable que ja ve amb ROS
         name='joint_state_publisher', #Node que ja ve amb ROS
-        condition=launch.conditions.UnlessConditions(LaunchConfiguration('gui')) #Et comprova si es dona aquesta condició per llençar el node. En aquest cas, la condició és que a gui no hi hagi un arxiu de preconfirguració. Gui es refereix a la interfície gràfica.
+       # condition=launch.conditions.UnlessConditions(LaunchConfiguration('gui')) #Et comprova si es dona aquesta condició per llençar el node. En aquest cas, la condició és que a gui no hi hagi un arxiu de preconfirguració. Gui es refereix a la interfície gràfica.
     )
 
     #El node joint_state_publisher_gui és una interfície gràfica d'usuari que permet als usuaris editar les dades d'estat dels joints del robot a temps real.
@@ -42,7 +43,7 @@ def generate_launch_description():
         package='joint_state_publisher_gui', #Paquet que ja ve amb ROS
         executable='joint_state_publisher_gui', #Executable que ja ve amb ROS
         name='joint_state_publisher_gui', #Node que ja ve amb ROS
-        condition =launch.conditions.IfConditions(LaunchConfiguration('gui')) #Comprova que tinguis la gui oberta. EN el cas de ROS2 -> gui = rviz
+        #condition =launch.conditions.IfConditions(LaunchConfiguration('gui')) #Comprova que tinguis la gui oberta. EN el cas de ROS2 -> gui = rviz
     )
 
     #Crea el node rviz2
