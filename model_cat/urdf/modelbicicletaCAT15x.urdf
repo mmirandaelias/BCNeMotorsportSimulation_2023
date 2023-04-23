@@ -10,25 +10,26 @@
 
         <!-- ############################# CENTRE DE GRAVETAT ############################ -->
         <!-- Creem una articulació que simbolitza la distància entre el centre de gravetat del model i el base_link del món. Això es fa perquè rviz utilitza obligatòriament base_link i d'aquesta manera podrà realitzar totes les transformades fins aquest origen de coordenades-->
-
         <link name="cgCAT15x" type="fixed"> <!-- fixed: vol dir que és fix respecte el seu pare-->
             <inertial> <!-- Defineixes les propietats físiques --> 
                 <!-- ROS t'avisa que si estàs utiltzant links de referència, com en aquest cas, per controlar-los, si els hi dones un valor de 0 pot passar que el model col·lapsi i tots els links conicideixin amb el base-link. 
                 Per evitar-ho et dona unes xifres aproximades bàsiques. Et diu que utilitzis un tensor d'inèrcies de ixx/iyy/izz=1e-3. Que correspondria a la inèrcia d'una caixa de 10cm i 600 grams. -->
-                <mass value="1"/> <!-- La massa es defineix en kg en urdf -->
+                <mass value="1"/> <!-- Lfa massa es defineix en kg en urdf -->
                 <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
             </inertial>
         </link>
+        <gazebo reference="cgCAT15x"></gazebo>
 
+        
         <joint name="dist_baselink_cgCAT15x" type="fixed"> <!-- fixed: vol dir que l'articulació conecta dos eixos de referència de forma fixa, no té graus de llibertat-->
             <parent link="base_link"/> <!--Li dones un dels links amb el que el conectaràs (del que neix)-->
             <child link="cgCAT15x"/> <!--Li dones l'altre link amb el que el conectarà (on va)-->
             <origin xyz="0 0 0"
                     rpy="0 0 0"/> <!-- origin t'especifica la posició i rotació del child link-->
         </joint>
+        <gazebo reference="dist_baselink_cgCAT15x"></gazebo>
 
         <!-- ############################# XASSÍS ############################ -->
-
         <link name="xassisCAT15x">
             <!-- Descrius les propietats de col·lisió del teu link. És obligatori (pel software intern de càlcul que té ROS, que li defineixis una geometria.)-->
             <collision>
@@ -53,16 +54,19 @@
                 <origin xyz="0 0 0" /> <!-- Centre de gravetat del Xassís-->
             </inertial>
         </link>
+        <gazebo reference="xassisCAT15x"></gazebo>
 
+        
         <joint name="cgCAT15x_xassisCAT15x" type="fixed">
             <parent link="cgCAT15x"/> <!--Li dones un dels links amb el que el conectaràs (del que neix)-->
             <child link="xassisCAT15x"/> <!--Li dones l'altre link amb el que el conectarà (on va)-->
             <origin xyz="0.765 0 0.278"
                     rpy="0 0 0"/> <!-- origin t'especifica la posició i rotació del child link-->
         </joint>
-    
-        <!-- ############################# RODA POSTERIOR ############################ -->
+        <gazebo reference="cgCAT15x_xassisCAT15x"></gazebo>
 
+
+        <!-- ############################# RODA POSTERIOR ############################ -->
         <link name="rodapostCAT15x">
             <inertial>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -93,6 +97,7 @@
                 </geometry>
             </collision>
         </link>
+        <gazebo reference="rodapostCAT15x"></gazebo>
 
         <joint name="xassisCAT15x_rodapostCAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua-->
             <origin xyz="0.765 0 -0.0748"
@@ -101,11 +106,9 @@
             <child link="rodapostCAT15x"/>
             <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
         </joint>
-        <!-- Li donem un nom per poder utilitzar-la a gazebo -->
-        <gazebo reference="rodapostCAT15x"> </gazebo>
+        <gazebo reference="xassisCAT15x_rodapostCAT15x"></gazebo>       
 
         <!-- ############################# DIRECCIÓ ############################ -->
-
         <link name="direccioCAT15x">
             <inertial>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -122,7 +125,9 @@
                 </material>             
             </visual>
         </link>
+        <gazebo reference="direccioCAT15x"></gazebo>
 
+         
         <joint name="xassisCAT15x_direccioCAT15x" type="revolute"> <!--Aquest tipus indica que l'articulació rotarà de forma continua amb límits-->
             <origin xyz="-0.765 0 -0.0748"
                     rpy="0 0 0"/>
@@ -130,10 +135,10 @@
             <child link="direccioCAT15x"/>
             <axis xyz="0 0 1"/> <!--T'indica que rotarà de forma continua sobre l'eix z-->
             <limit lower="-0.8727" upper="0.8727" effort="10000000" velocity="1000000"/> <!--T'indica el límit inferior i superior fins el qual pot girar el volant en radiants,la màxima força que l'articulació pot exercir en newtons, i la velocitat angular específica màxima que pot moure's l'articulació en rad/s. -->
-
         </joint>
-        <!-- ############################# RODA DAVANTERA ############################ -->
+        <gazebo reference="xassisCAT15x_direccioCAT15x"></gazebo>
 
+        <!-- ############################# RODA DAVANTERA ############################ -->
         <link name="rodadavCAT15x">
             <inertial>
                 <origin xyz="0 0 0" rpy="0 0 0"/>
@@ -164,15 +169,16 @@
                 </geometry>
             </collision>
         </link>
-        <!-- Li donem un nom per poder utilitzar-la a gazebo -->
         <gazebo reference="rodadavCAT15x"> </gazebo>
 
-         <joint name="direccioCAT15x_rodadavCAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua sense límits-->
-            <origin xyz="0 0 0"
-                    rpy="0 0 0"/>
-            <parent link="direccioCAT15x"/>
-            <child link="rodadavCAT15x"/>
-            <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
+        
+        <joint name="direccioCAT15x_rodadavCAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua sense límits-->
+           <origin xyz="0 0 0"
+                   rpy="0 0 0"/>
+           <parent link="direccioCAT15x"/>
+           <child link="rodadavCAT15x"/>
+           <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
         </joint>
-  
+        <gazebo reference="direccioCAT15x_rodadavCAT15x"> </gazebo>
+
     </robot>

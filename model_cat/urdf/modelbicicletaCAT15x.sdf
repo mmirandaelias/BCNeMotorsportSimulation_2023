@@ -1,0 +1,248 @@
+<sdf version='1.9'>
+  <model name='CAT15x_Bicicleta'>
+    <link name='base_link'>
+      <inertial>
+        <pose>0.7611940298507462 0 0.2766169154228856 0 0 0</pose>
+        <mass>201</mass>
+        <inertia>
+          <ixx>16.377899502487558</ixx>
+          <ixy>0</ixy>
+          <ixz>-0.2116119402985035</ixz>
+          <iyy>34.260212935323381</iyy>
+          <iyz>0</iyz>
+          <izz>48.483313432835828</izz>
+        </inertia>
+      </inertial>
+      <collision name='base_link_fixed_joint_lump__xassisCAT15x_collision'>
+        <pose>0.765 0 0.278 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://meshes/whole_car.stl</uri>
+          </mesh>
+        </geometry>
+      </collision>
+      <visual name='base_link_fixed_joint_lump__xassisCAT15x_visual'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://meshes/whole_car.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0 0 1 1</diffuse>
+          <ambient>0 0 1 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name='xassisCAT15x_direccioCAT15x' type='revolute'>
+      <pose relative_to='base_link'>0 0 0.2032 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>direccioCAT15x</child>
+      <axis>
+        <xyz>0 0 1</xyz>
+        <limit>
+          <lower>-0.87270000000000003</lower>
+          <upper>0.87270000000000003</upper>
+          <effort>10000000</effort>
+          <velocity>1000000</velocity>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.20000000000000001</erp>
+          </limit>
+        </ode>
+      </physics>
+    </joint>
+    <link name='direccioCAT15x'>
+      <pose relative_to='xassisCAT15x_direccioCAT15x'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>1</mass>
+        <inertia>
+          <ixx>0.0040000000000000001</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.0040000000000000001</iyy>
+          <iyz>0</iyz>
+          <izz>0.0040000000000000001</izz>
+        </inertia>
+      </inertial>
+      <visual name='direccioCAT15x_visual'>
+        <pose>0 0 -0.2032 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://model_cat/meshes/steering_hinge.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0 0 0 1</diffuse>
+          <ambient>0 0 0 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name='direccioCAT15x_rodadavCAT15x' type='revolute'>
+      <pose relative_to='direccioCAT15x'>0 0 0 0 0 0</pose>
+      <parent>direccioCAT15x</parent>
+      <child>rodadavCAT15x</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-10000000000000000</lower>
+          <upper>10000000000000000</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.20000000000000001</erp>
+          </limit>
+        </ode>
+      </physics>
+    </joint>
+    <link name='rodadavCAT15x'>
+      <pose relative_to='direccioCAT15x_rodadavCAT15x'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>5</mass>
+        <inertia>
+          <ixx>0.29999999999999999</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.20000000000000001</iyy>
+          <iyz>0</iyz>
+          <izz>0.20000000000000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='rodadavCAT15x_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.22500000000000001</radius>
+          </sphere>
+        </geometry>
+      </collision>
+      <visual name='rodadavCAT15x_fixed_joint_lump__rodadavECAT15x_visual'>
+        <pose>0 0 -0.2032 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://model_cat/meshes/wheelFL.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0 0 0 1</diffuse>
+          <ambient>0 0 0 1</ambient>
+        </material>
+      </visual>
+      <visual name='rodadavCAT15x_fixed_joint_lump__rodadavDCAT15x_visual_1'>
+        <pose>0 0 -0.2032 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://model_cat/meshes/wheelFR.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0 0 0 1</diffuse>
+          <ambient>0 0 0 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <joint name='xassisCAT15x_rodapostCAT15x' type='revolute'>
+      <pose relative_to='base_link'>1.53 0 0.2032 0 0 0</pose>
+      <parent>base_link</parent>
+      <child>rodapostCAT15x</child>
+      <axis>
+        <xyz>0 1 0</xyz>
+        <limit>
+          <lower>-10000000000000000</lower>
+          <upper>10000000000000000</upper>
+        </limit>
+        <dynamics>
+          <spring_reference>0</spring_reference>
+          <spring_stiffness>0</spring_stiffness>
+        </dynamics>
+      </axis>
+      <physics>
+        <ode>
+          <limit>
+            <cfm>0</cfm>
+            <erp>0.20000000000000001</erp>
+          </limit>
+        </ode>
+      </physics>
+    </joint>
+    <link name='rodapostCAT15x'>
+      <pose relative_to='xassisCAT15x_rodapostCAT15x'>0 0 0 0 0 0</pose>
+      <inertial>
+        <pose>0 0 0 0 0 0</pose>
+        <mass>5</mass>
+        <inertia>
+          <ixx>0.29999999999999999</ixx>
+          <ixy>0</ixy>
+          <ixz>0</ixz>
+          <iyy>0.20000000000000001</iyy>
+          <iyz>0</iyz>
+          <izz>0.20000000000000001</izz>
+        </inertia>
+      </inertial>
+      <collision name='rodapostCAT15x_collision'>
+        <pose>0 0 0 0 0 0</pose>
+        <geometry>
+          <sphere>
+            <radius>0.22500000000000001</radius>
+          </sphere>
+        </geometry>
+      </collision>
+      <visual name='rodapostCAT15x_fixed_joint_lump__rodapostECAT15x_visual'>
+        <pose>-1.53 0 -0.2032 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://model_cat/meshes/wheelRL.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0 0 0 1</diffuse>
+          <ambient>0 0 0 1</ambient>
+        </material>
+      </visual>
+      <visual name='rodapostCAT15x_fixed_joint_lump__rodapostDCAT15x_visual_1'>
+        <pose>-1.53 0 -0.2032 0 0 0</pose>
+        <geometry>
+          <mesh>
+            <scale>1 1 1</scale>
+            <uri>model://model_cat/meshes/wheelRR.stl</uri>
+          </mesh>
+        </geometry>
+        <material>
+          <diffuse>0 0 0 1</diffuse>
+          <ambient>0 0 0 1</ambient>
+        </material>
+      </visual>
+    </link>
+    <frame name='cgCAT15x_xassisCAT15x' attached_to='cgCAT15x'>
+      <pose>0.765 0 0.278 0 -0 0</pose>
+    </frame>
+    <frame name='xassisCAT15x' attached_to='cgCAT15x_xassisCAT15x'/>
+    <frame name='dist_baselink_cgCAT15x' attached_to='base_link'>
+      <pose>0 0 0 0 -0 0</pose>
+    </frame>
+    <frame name='cgCAT15x' attached_to='dist_baselink_cgCAT15x'/>
+  </model>
+</sdf>

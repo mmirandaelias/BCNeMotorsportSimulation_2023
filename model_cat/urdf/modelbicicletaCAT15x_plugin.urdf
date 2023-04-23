@@ -1,0 +1,213 @@
+    
+    <!-- ##################################################################################### -->
+    <!-- ############################# Model Bicicleta del CAT15x ############################ -->
+    <!-- ##################################################################################### -->
+
+    <robot name="CAT15x_Bicicleta">
+        
+         <!-- Declarem l'origen de coordenades més bàsiques del "món" on creem el model -->
+        <link name="base_link"></link> <!-- Sobre el link(origen de coordenades) "base_link" es construeixen tots els altres origens de coordenades -->
+
+        <!-- ############################# CENTRE DE GRAVETAT ############################ -->
+        <!-- Creem una articulació que simbolitza la distància entre el centre de gravetat del model i el base_link del món. Això es fa perquè rviz utilitza obligatòriament base_link i d'aquesta manera podrà realitzar totes les transformades fins aquest origen de coordenades-->
+        <link name="cgCAT15x" type="fixed"> <!-- fixed: vol dir que és fix respecte el seu pare-->
+            <inertial> <!-- Defineixes les propietats físiques --> 
+                <!-- ROS t'avisa que si estàs utiltzant links de referència, com en aquest cas, per controlar-los, si els hi dones un valor de 0 pot passar que el model col·lapsi i tots els links conicideixin amb el base-link. 
+                Per evitar-ho et dona unes xifres aproximades bàsiques. Et diu que utilitzis un tensor d'inèrcies de ixx/iyy/izz=1e-3. Que correspondria a la inèrcia d'una caixa de 10cm i 600 grams. -->
+                <mass value="1"/> <!-- Lfa massa es defineix en kg en urdf -->
+                <inertia ixx="0.001" ixy="0.0" ixz="0.0" iyy="0.001" iyz="0.0" izz="0.001"/>
+            </inertial>
+        </link>
+        <gazebo reference="cgCAT15x"></gazebo>
+
+        
+        <joint name="dist_baselink_cgCAT15x" type="fixed"> <!-- fixed: vol dir que l'articulació conecta dos eixos de referència de forma fixa, no té graus de llibertat-->
+            <parent link="base_link"/> <!--Li dones un dels links amb el que el conectaràs (del que neix)-->
+            <child link="cgCAT15x"/> <!--Li dones l'altre link amb el que el conectarà (on va)-->
+            <origin xyz="0 0 0"
+                    rpy="0 0 0"/> <!-- origin t'especifica la posició i rotació del child link-->
+        </joint>
+        <gazebo reference="dist_baselink_cgCAT15x"></gazebo>
+
+        <!-- ############################# XASSÍS ############################ -->
+        <link name="xassisCAT15x">
+            <!-- Descrius les propietats de col·lisió del teu link. És obligatori (pel software intern de càlcul que té ROS, que li defineixis una geometria.)-->
+            <collision>
+                <geometry>
+                    <mesh filename="package://model_cat/meshes/whole_car.stl"/> <!-- Escales el model per poder-lo visualitzar bé. Tens la geometria emmagatzemada en un fitxer estil stl. Així el pots exportar de solidworks i posar-li la forma que vulguis-->
+                </geometry>
+            </collision>
+            <!-- Descrius les propietats visuals del teu link perquè es pugui mostrar -->
+            <visual>
+                <origin xyz="-0.765 0 -0.278"/>
+                <geometry>
+                    <mesh filename="package://model_cat/meshes/whole_car.stl"/>
+                </geometry>
+                <material name = "material_xassis"> 
+                    <color rgba = "0 0 0.8 1.0"/> <!-- Color blau equip -->
+                </material> 
+            </visual>
+            <!-- Defineixes les propietats físiques --> 
+            <inertial> 
+                <mass value="200"/> <!-- La massa es defineix en kg en urdf -->
+                <inertia ixx="16.3" ixy="0.0" ixz="0.0" iyy="33.6" iyz="0.0" izz="47.9"/>
+                <origin xyz="0 0 0" /> <!-- Centre de gravetat del Xassís-->
+            </inertial>
+        </link>
+        <gazebo reference="xassisCAT15x"></gazebo>
+
+        
+        <joint name="cgCAT15x_xassisCAT15x" type="fixed">
+            <parent link="cgCAT15x"/> <!--Li dones un dels links amb el que el conectaràs (del que neix)-->
+            <child link="xassisCAT15x"/> <!--Li dones l'altre link amb el que el conectarà (on va)-->
+            <origin xyz="0.765 0 0.278"
+                    rpy="0 0 0"/> <!-- origin t'especifica la posició i rotació del child link-->
+        </joint>
+        <gazebo reference="cgCAT15x_xassisCAT15x"></gazebo>
+
+
+        <!-- ############################# RODA POSTERIOR ############################ -->
+        <link name="rodapostCAT15x">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="5"/>
+                <inertia ixx="0.3" ixy="0" ixz="0" iyy="0.2" iyz="0" izz="0.2"/>
+            </inertial>
+            <visual name = "rodapostECAT15x">
+                <origin xyz="-1.53 0 -0.2032" rpy="0 0 0"/>
+                <geometry>
+                <mesh filename="package://model_cat/meshes/wheelRL.stl"/>
+                </geometry>
+                <material name = "material_rodapostE"> 
+                    <color rgba = "0.0 0.0 0.0 1.0"/> <!-- Color negre -->
+                </material>             
+            </visual>
+            <visual name = "rodapostDCAT15x">
+                <origin xyz="-1.53 0 -0.2032" rpy="0 0 0"/>
+                <geometry>
+                <mesh filename="package://model_cat/meshes/wheelRR.stl"/>
+                </geometry>
+                <material name = "material_rodapostD"> 
+                    <color rgba = "0.0 0.0 0.0 1.0"/> <!-- Color negre -->
+                </material>             
+            </visual>
+            <collision>
+                <geometry>
+                    <sphere radius="0.225"/> <!-- Computacionalment seria complicat que els xocs amb la roda es fessin amb el format stl, és millor que se li doni una forma senzilla -->
+                </geometry>
+            </collision>
+        </link>
+        <gazebo reference="rodapostCAT15x"></gazebo>
+
+        <joint name="xassisCAT15x_rodapostCAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua-->
+            <origin xyz="0.765 0 -0.0748"
+                    rpy="0 0 0"/>
+            <parent link="xassisCAT15x"/>
+            <child link="rodapostCAT15x"/>
+            <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
+        </joint>
+        <gazebo reference="xassisCAT15x_rodapostCAT15x"></gazebo>       
+
+        <!-- ############################# DIRECCIÓ ############################ -->
+        <link name="direccioCAT15x">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="1"/>
+                <inertia ixx="0.004" ixy="0" ixz="0" iyy="0.004" iyz="0" izz="0.004"   />
+            </inertial>
+            <visual name = "direccioCAT15x">
+                <origin xyz="0 0 -0.2032" rpy="0 0 0"/>
+                <geometry>
+                <mesh filename="package://model_cat/meshes/steering_hinge.stl" scale="1 1 1"/>
+                </geometry>
+                <material name = "material_direccioD"> 
+                    <color rgba = "0.0 0.0 0.0 1.0"/> <!-- Color negre -->
+                </material>             
+            </visual>
+        </link>
+        <gazebo reference="direccioCAT15x"></gazebo>
+
+         
+        <joint name="xassisCAT15x_direccioCAT15x" type="revolute"> <!--Aquest tipus indica que l'articulació rotarà de forma continua amb límits-->
+            <origin xyz="-0.765 0 -0.0748"
+                    rpy="0 0 0"/>
+            <parent link="xassisCAT15x"/>
+            <child link="direccioCAT15x"/>
+            <axis xyz="0 0 1"/> <!--T'indica que rotarà de forma continua sobre l'eix z-->
+            <limit lower="-0.8727" upper="0.8727" effort="10000000" velocity="1000000"/> <!--T'indica el límit inferior i superior fins el qual pot girar el volant en radiants,la màxima força que l'articulació pot exercir en newtons, i la velocitat angular específica màxima que pot moure's l'articulació en rad/s. -->
+        </joint>
+        <gazebo reference="xassisCAT15x_direccioCAT15x"></gazebo>
+
+        <!-- ############################# RODA DAVANTERA ############################ -->
+        <link name="rodadavCAT15x">
+            <inertial>
+                <origin xyz="0 0 0" rpy="0 0 0"/>
+                <mass value="5"/>
+                <inertia ixx="0.3" ixy="0" ixz="0" iyy="0.2" iyz="0" izz="0.2"/>
+            </inertial>
+            <visual name ="rodadavECAT15x" >
+                <origin xyz="0 0 -0.2032" rpy="0 0 0"/>
+                <geometry>
+                <mesh filename="package://model_cat/meshes/wheelFL.stl"/>
+                </geometry>
+                <material name = "material_rodadavE"> 
+                    <color rgba = "0.0 0.0 0.0 1.0"/> <!-- Color negre -->
+                </material>             
+            </visual>
+            <visual name ="rodadavDCAT15x">
+                <origin xyz="0 0 -0.2032" rpy="0 0 0"/>
+                <geometry>
+                <mesh filename="package://model_cat/meshes/wheelFR.stl"/>
+                </geometry>
+                <material name = "material_rodadavD"> 
+                    <color rgba = "0.0 0.0 0.0 1.0"/> <!-- Color negre -->
+                </material>             
+            </visual>
+            <collision>
+                <geometry>
+                    <sphere radius="0.225"/> <!-- Computacionalment seria complicat que els xocs amb la roda es fessin amb el format stl, és millor que se li doni una forma senzilla -->
+                </geometry>
+            </collision>
+        </link>
+        <gazebo reference="rodadavCAT15x"> </gazebo>
+
+        
+        <joint name="direccioCAT15x_rodadavCAT15x" type="continuous"> <!--Aquest tipus indica que l'articulació rotarà de forma continua sense límits-->
+           <origin xyz="0 0 0"
+                   rpy="0 0 0"/>
+           <parent link="direccioCAT15x"/>
+           <child link="rodadavCAT15x"/>
+           <axis xyz="0 1 0"/> <!--T'indica que rotarà de forma continua sobre l'eix y-->
+        </joint>
+        <gazebo reference="direccioCAT15x_rodadavCAT15x"> </gazebo>
+    <!--
+        <!-- ############################# MODEL DEFINIT EN UN PLUGIN ############################ -->
+        <gazebo>
+            <plugin name="modelbicicleta" filename="libignition-gazebo-modelbicicleta.so"> <!--Li dones un nom al plugin i li dones el nom del fitxer de la biblioteca compatida en el que es troba. En aquest cas se l'anomena libignition-gazebo ja que és el prefix que s'utilitza per convenció -->
+                <!--Aquí dins defineixes els paràmetres que has declarat en el plugin-->
+                <update_rate>100</update_rate> <!-- freqüència a la qual funcionarà aquest plugin, en Hz -->
+                
+                <!--Declares les articulacions que utilitzaràs en el plugin-->
+                <cg>cgCAT15x_xassisCAT15x</cg>
+                <rodapost>xassisCAT15x_rodapostCAT15x</rodapost>
+                <direccio>xassisCAT15x_direccioCAT15x</direccio>
+                <rodadav>direccioCAT15x_rodadavCAT15x</rodadav>
+            </plugin>  
+        </gazebo>
+    -->
+    <!-- DESCOMENTA I COMENTA SEGONS UTILITZIS EL PLUGIN O NO
+    
+        <!-- ############################# PLUGIN STATE PUBLISHER DE GAZEBO ############################ -->
+        <gazebo>
+        <!-- la llibreria amb aquest plugin ja ve donada per gazebo-->
+            <plugin
+                filename="libignition-gazebo-joint-state-publisher-system.so"
+                name="ignition::gazebo::systems::JointStatePublisher">
+                <joint_name>cgCAT15x_xassisCAT15x</joint_name>
+                <joint_name>xassisCAT15x_rodapostCAT15x</joint_name>
+                <joint_name>xassisCAT15x_direccioCAT15x</joint_name>
+                <joint_name>direccioCAT15x_rodadavCAT15x</joint_name>
+            </plugin>
+        </gazebo>
+    -->
+    </robot>

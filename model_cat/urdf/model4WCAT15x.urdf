@@ -39,13 +39,13 @@
             <!-- Descrius les propietats de col·lisió del teu link. És obligatori (pel software intern de càlcul que té ROS, que li defineixis una geometria.)-->
             <collision>
                 <geometry>
-                    <mesh filename="package://CATSIM/src/model_cat/meshes/whole_car.stl" scale = "0.001 0.001 0.001" /> <!-- Escales el model per poder-lo visualitzar bé. Tens la geometria emmagatzemada en un fitxer estil stl. Així el pots exportar de solidworks i posar-li la forma que vulguis-->
+                    <mesh filename="package://model_cat/meshes/whole_car.stl" scale = "0.001 0.001 0.001" /> <!-- Escales el model per poder-lo visualitzar bé. Tens la geometria emmagatzemada en un fitxer estil stl. Així el pots exportar de solidworks i posar-li la forma que vulguis-->
                 </geometry>
             </collision>
             <!-- Descrius les propietats visuals del teu link perquè es pugui mostrar -->
             <visual>
                 <geometry>
-                    <mesh filename="package://CATSIM/src/model_cat/meshes/whole_car.stl" scale = "0.001 0.001 0.001" />
+                    <mesh filename="package://model_cat/meshes/whole_car.stl" scale = "0.001 0.001 0.001" />
                 </geometry>
                 <material> 
                     <color rgba = "4.0 52.0 100.0 1.0"> <!-- Color blau equip -->
@@ -76,7 +76,7 @@
             </inertial>
             <visual>
                 <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                <mesh filename="package://model_cat/meshes/wheel.stl"/>
                 </geometry>
                 <material> 
                     <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
@@ -108,7 +108,7 @@
             </inertial>
             <visual>
                 <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                <mesh filename="package://model_cat/meshes/wheel.stl"/>
                 </geometry>
                 <material> 
                     <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
@@ -142,7 +142,7 @@
             </inertial>
             <visual>
                 <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/steering_hinge.stl" scale="1 1 1"/>
+                <mesh filename="package://model_cat/meshes/steering_hinge.stl" scale="1 1 1"/>
                 </geometry>
                 <material> 
                     <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
@@ -169,7 +169,7 @@
             </inertial>
             <visual>
                 <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/steering_hinge.stl" scale="1 1 1"/>
+                <mesh filename="package://model_cat/meshes/steering_hinge.stl" scale="1 1 1"/>
                 </geometry>
                 <material> 
                     <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
@@ -194,7 +194,7 @@
             </inertial>
             <visual>
                 <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                <mesh filename="package://model_cat/meshes/wheel.stl"/>
                 </geometry>
                 <material> 
                     <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
@@ -226,7 +226,7 @@
             </inertial>
             <visual>
                 <geometry>
-                <mesh filename="package://CATSIM/src/model_cat/meshes/wheel.stl"/>
+                <mesh filename="package://model_cat/meshes/wheel.stl"/>
                 </geometry>
                 <material> 
                     <color rgba = "0.0 0.0 0.0 1.0"> <!-- Color negre -->
