@@ -18,8 +18,7 @@ def generate_launch_description():
     use_sim_time = LaunchConfiguration('use_sim_time') # Et declara un element tipu LaunchCOnfiguration (anomenat use_sim_time) que et permetrà obtenir la variable de configuració 'use_sim_time' d'un arxiu launch de gazebo.
     package_name = 'model_cat' #Defineix el nom del paquet que conté el model del robot per poder-lo utilitzar més tard.
     pkg_share = FindPackageShare(package=package_name).find(package_name) #Et busca el path fins la carpeta que conté el package_name, és el dir el path fins la carpeta de model_cat.
-    pkg_gazebo_ros = FindPackageShare(package='gazebo_ros').find('gazebo_ros') # Et gurda el path fins el paquest de gazebo_ros, que ja ve amb ROS
-    
+    pkg_gazebo_ros = FindPackageShare(package='ros_gz').find('ros_gz') # Et gurda el path fins el paquest de gazebo_ros, que ja ve amb ROS
 
     #world_file_path = 'world.world' #Defineix el nom de l'arxiu que conté el món de gazebo on simularem el cotxe.
     #world = LaunchConfiguration('world') #Et crea un arxiu de configuració anomenat world. 
